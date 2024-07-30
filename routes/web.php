@@ -4,15 +4,40 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SobreController;
 use Illuminate\Support\Facades\DB;
 
-Route::get('/test-db', function () {
-    try {
-        // Executa uma consulta para verificar se a conexão está funcionando
-        $result = DB::select('SHOW TABLES');
-        return response()->json(['message' => 'Conexão bem-sucedida', 'tables' => $result]);
-    } catch (\Exception $e) {
-        return response()->json(['message' => 'Erro ao conectar ao banco de dados', 'error' => $e->getMessage()]);
+Route::get('/json', function(){
+    //Construindo um objeto de usuário
+    class User{
+        public $nome;
+        public $idade;
+        public $email;
+
+        public function __construct($nome, $idade, $email){
+            $this->nome = $nome;
+            $this->idade = $idade;
+            $this->email = $email;
+        }
+
+        public function mostrarDados(){
+            return "Olá, "."Eu me chamo ".$this->nome." "."e tenho ".$this->idade." anos";
+        }
     }
+   
+
+    $usuario1 = new User("Jordan", 28, "jordanvictor63@gmail.com");
+    $usuario2 = new User("João", 56, "joao@gmail.com");
+    $usuario3 = new User("Mardizaa", 36, "mardizaa@gmail.com");
+    $usuario4 = new User("Naruto", 500, "naruto@gmail.com");
+    $usuarios = [];
+    array_push($usuarios, $usuario1);
+    array_push($usuarios, $usuario2);
+    array_push($usuarios, $usuario3);
+    array_push($usuarios, $usuario4);
+
+
+    return response()->json($usuarios);
 });
+
+
 
 
 
