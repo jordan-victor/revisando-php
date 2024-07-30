@@ -7,6 +7,13 @@
 </head>
 <body>
     <h1>Sobre</h1>
+
+    <p>{{$nome}}</p>
+
+
+
+
+    <hr>
     <p>{{$param}}</p>
     @foreach($lista as $elemento)
         @if($elemento < 10)

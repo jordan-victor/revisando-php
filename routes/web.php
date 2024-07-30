@@ -2,8 +2,17 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SobreController;
+use Illuminate\Support\Facades\DB;
 
-
+Route::get('/test-db', function () {
+    try {
+        // Executa uma consulta para verificar se a conexão está funcionando
+        $result = DB::select('SHOW TABLES');
+        return response()->json(['message' => 'Conexão bem-sucedida', 'tables' => $result]);
+    } catch (\Exception $e) {
+        return response()->json(['message' => 'Erro ao conectar ao banco de dados', 'error' => $e->getMessage()]);
+    }
+});
 
 
 
@@ -40,14 +49,14 @@ Route::get('/', function(){
     $usuarios = [];
     array_push($usuarios, $usuario1);
     array_push($usuarios, $usuario2);
-    array_push($usuario1, $usuario3);
+    array_push($usuarios, $usuario3);
     echo $usuarios[0]->nome."<br>";
 
 
     echo $usuario1->nome;
     echo "<br>";
     echo $usuario1->mostrarDados();
-    return view('home',['nome'=>$nome, 'array'=>$array, 'usuario1'=>$usuario1]);
+    return view('home',['nome'=>$nome, 'array'=>$array,'usuario1'=>$usuario1, 'usuarios'=>$usuarios]);
 });
  //-------------------------------------------------------------------------------------
 
