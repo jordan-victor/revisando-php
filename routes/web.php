@@ -1,93 +1,94 @@
 <?php
+
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\csvController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SobreController;
-use Illuminate\Support\Facades\DB;
 
-Route::get('/json', function(){
-    //Construindo um objeto de usuário
-    class User{
+use Illuminate\Http\Request;
+use App\Http\Middleware\authMiddleware;
+
+/*PRÁTICA*/
+Route::middleware(authMiddleware::class)
+->get('/', [HomeController::class, 'ShowHome'])//->middleware(authMiddleware::class);
+->name('home');
+
+Route::get('/sobre', [SobreController::class, 'ShowSobre'])->name('sobre');
+
+Route::get('pratica', function(Request $request){
+    $filtro = $request->opcao;
+
+    class Produto{
         public $nome;
-        public $idade;
-        public $email;
+        public $preco;
+        public $qtd;
+        public $categoria;
 
-        public function __construct($nome, $idade, $email){
+        public function __construct($nome, $preco, $qtd, $categoria){
             $this->nome = $nome;
-            $this->idade = $idade;
-            $this->email = $email;
-        }
-
-        public function mostrarDados(){
-            return "Olá, "."Eu me chamo ".$this->nome." "."e tenho ".$this->idade." anos";
+            $this->preco = $preco;
+            $this->qtd = $qtd;
+            $this->categoria = $categoria; 
         }
     }
-   
 
-    $usuario1 = new User("Jordan", 28, "jordanvictor63@gmail.com");
-    $usuario2 = new User("João", 56, "joao@gmail.com");
-    $usuario3 = new User("Mardizaa", 36, "mardizaa@gmail.com");
-    $usuario4 = new User("Naruto", 500, "naruto@gmail.com");
-    $usuarios = [];
-    array_push($usuarios, $usuario1);
-    array_push($usuarios, $usuario2);
-    array_push($usuarios, $usuario3);
-    array_push($usuarios, $usuario4);
+    $produtos = [];
+    $p1 = new Produto('PC GAMER', 10000, 15, "computador");
+    $p2 = new Produto('MOUSE', 169, 100, "periferico");
+    $p3 = new Produto('TECLADO', 250, 0, "periferico");
+    $p4 = new Produto('NOTEBOOK', 169, 100, "computador");
+    array_push($produtos, $p1);
+    array_push($produtos, $p2);
+    array_push($produtos, $p3);
+    array_push($produtos, $p4);
 
 
-    return response()->json($usuarios);
+    if($filtro == "esgotado"){
+        $arrayFilter = array_filter($produtos, function($produtos){
+            return $produtos->qtd == 0;
+        });
+        $produtos = $arrayFilter;
+    }
+
+    else if($filtro == "todos"){
+        $arrayFilter = array_filter($produtos, function($produtos){
+            return $produtos->qtd >= 0;
+        });
+        $produtos = $arrayFilter;
+    }
+
+    return view('pratica.p1', ['produtos'=>$produtos]);
 });
 
 
 
 
 
-Route::get('/', function(){
-    $nome = "Jordan";
-
-    date_default_timezone_set('America/Manaus');
-    $data = date('d/m/Y');
-    $hora = date('H:i:s');
-
-    $array = [$data, $hora];
-
-    //Construindo um objeto de usuário
-    class User{
-        public $nome;
-        public $idade;
-        public $email;
-
-        public function __construct($nome, $idade, $email){
-            $this->nome = $nome;
-            $this->idade = $idade;
-            $this->email = $email;
-        }
-
-        public function mostrarDados(){
-            return "Olá, "."Eu me chamo ".$this->nome." "."e tenho ".$this->idade." anos";
-        }
-    }
-   
-
-    $usuario1 = new User("Jordan", 28, "jordanvictor63@gmail.com");
-    $usuario2 = new User("João", 56, "joao@gmail.com");
-    $usuario3 = new User("Mardizaa", 36, "mardizaa@gmail.com");
-    $usuarios = [];
-    array_push($usuarios, $usuario1);
-    array_push($usuarios, $usuario2);
-    array_push($usuarios, $usuario3);
-    echo $usuarios[0]->nome."<br>";
 
 
-    echo $usuario1->nome;
-    echo "<br>";
-    echo $usuario1->mostrarDados();
-    return view('home',['nome'=>$nome, 'array'=>$array,'usuario1'=>$usuario1, 'usuarios'=>$usuarios]);
+
+
+/*MOSTRAR DADOS DO CSV*/
+Route::get('/notificacoes',[csvController::class, 'showForm']);
+Route::post('process-csv', [CsvController::class, 'processCsv'])->name('process-csv');
+
+
+
+
+
+
+
+
+/*TOTAS DE LOGIN*/
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
- //-------------------------------------------------------------------------------------
 
-
-
-
-
-Route::get('/home', [HomeController::class, "ShowHome"])->name('home');
-Route::get('/sobre/{param?}',[SobreController::class, "ShowSobre"])->name('sobre');
+require __DIR__.'/auth.php';

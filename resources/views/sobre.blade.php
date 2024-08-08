@@ -7,11 +7,21 @@
 </head>
 <body>
     <h1>Sobre</h1>
+    @include('layouts.navbar')
+    <hr>
 
     <p>{{$nome}}</p>
 
 
 
+    <p>{{count($produtos)}}</p>
+   
+
+    @foreach($produtos as $produto)
+        <p>{{$produto->preco}}</p>
+        @isset
+        <hr>
+    @endforeach
 
     <hr>
     <p>{{$param}}</p>
