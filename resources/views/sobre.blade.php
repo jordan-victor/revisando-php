@@ -19,7 +19,7 @@
 
     @foreach($produtos as $produto)
         <p>{{$produto->preco}}</p>
-        @isset
+       
         <hr>
     @endforeach
 

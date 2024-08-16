@@ -14,10 +14,11 @@ Route::middleware(authMiddleware::class)
 ->get('/', [HomeController::class, 'ShowHome'])//->middleware(authMiddleware::class);
 ->name('home');
 
-Route::get('/sobre', [SobreController::class, 'ShowSobre'])->name('sobre');
+Route::get('/sobre/{param?}', [SobreController::class, 'ShowSobre'])->name('sobre');
 
-Route::get('pratica', function(Request $request){
+Route::get('/pratica', function(Request $request){
     $filtro = $request->opcao;
+    $prod = $request->pesquisado;
 
     class Produto{
         public $nome;
@@ -58,7 +59,62 @@ Route::get('pratica', function(Request $request){
         $produtos = $arrayFilter;
     }
 
-    return view('pratica.p1', ['produtos'=>$produtos]);
+    else if ($filtro == "computador"){
+        $arrayFilter = array_filter($produtos, function($produtos){
+            return $produtos->categoria == "computador";
+        });
+        $produtos = $arrayFilter;
+    }
+
+    else if($filtro == "periferico"){
+        $arrayFilter = array_filter($produtos, function($produtos){
+            return $produtos->categoria == "periferico";
+        });
+        $produtos = $arrayFilter;
+    }
+
+
+
+
+    $pesquisado = null;
+    $createPesquisado = [];
+    if($prod != null){
+        foreach($produtos as $produto){
+            if($produto->nome == $prod){
+                echo "Achado";
+            }
+        }
+        
+        $pesquisado = array_filter($produtos, function($produtos) use($prod){
+            return $produtos->nome === $prod;
+        });
+
+        array_push($createPesquisado, $pesquisado);
+        echo count($createPesquisado); 
+    }
+    
+
+    $copiaProduto = null;
+    $msg = null;
+    if($prod != null){
+        foreach($produtos as $produto){
+            if($produto->nome == $prod){
+                $copiaProduto = new Produto($produto->nome, $produto->preco, $produto->qtd, $produto->categoria);
+            }     
+        }
+        if(empty($copiaProduto)){
+            $msg = "Produto não encontrado";
+        }
+    }
+
+    return view('pratica.p1',
+        [
+            'produtos'=>$produtos,
+            'pesquisado'=>$pesquisado,
+            'copiaProduto'=>$copiaProduto,
+            'msg'=>$msg
+        ]
+    );
 });
 
 

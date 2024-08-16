@@ -6,6 +6,6 @@
     <title>Document</title>
 </head>
 <body>
-    @yield('section')
+    @yield('content')
 </body>
 </html>

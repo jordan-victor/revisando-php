@@ -1,12 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+@extends('layouts.padrao')
+
+@section('content')
     <h1>PRÁTICA</h1>
+    @isset($msg)
+        <p>{{$msg}}</p> 
+    @endisset
+
+    @isset($copiaProduto)
+        <ul>
+            <li><strong>Produto:</strong> {{$copiaProduto->nome}}</li>
+            <li><strong>Preço:</strong> {{$copiaProduto->preco}}R$</li>
+            <li><strong>Quantidade:</strong> {{$copiaProduto->qtd}}und</li>
+            <li><strong>Categoria:</strong> {{$copiaProduto->categoria}}</li>
+        </ul>
+    @endisset
+
+    <hr>
+    @include('layouts.navbar') <br><br><br>
 
     <form action="/pratica" method="get" id="form">
         <select name="opcao" id="opcao" id="select" onchange="change()">
@@ -16,10 +26,20 @@
             <option value="computador">Computadores</option>
             <option value="periferico">Periféricos</option>
         </select>
+
+        <input type="text" name="pesquisado" placeholder="Pesquisar produto">
     </form>
 
     <h2>PRODUTOS</h2>
     <hr>
+    @isset($pesquisado)
+        @empty($pesquisado)
+            <p></p>
+        @endempty
+       
+    @endisset
+
+
     @foreach($produtos as $produto)
         <p>Nome: {{$produto->nome}}</p>
         <p>Categoria: {{$produto->categoria}}</p>
@@ -44,4 +64,4 @@
         document.getElementById("form").submit()
     }
 </script>
-</html>
+@endsection
