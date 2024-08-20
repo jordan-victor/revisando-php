@@ -6,6 +6,9 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>@yield('h1')</h1>
+    <p>navbar</p>
+    <hr>
     @yield('content')
 </body>
 </html>

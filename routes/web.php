@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\csvController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SobreController;
+use App\Http\Controllers\CrudController;
 
 use Illuminate\Http\Request;
 use App\Http\Middleware\authMiddleware;
@@ -93,19 +94,23 @@ Route::get('/pratica', function(Request $request){
         echo count($createPesquisado); 
     }
     
-
+    //PESQUISA DO PRODUTO
     $copiaProduto = null;
     $msg = null;
     if($prod != null){
         foreach($produtos as $produto){
             if($produto->nome == $prod){
                 $copiaProduto = new Produto($produto->nome, $produto->preco, $produto->qtd, $produto->categoria);
+                $c = [];
+                array_push($c, $copiaProduto);
+                $produtos = $c;
             }     
         }
         if(empty($copiaProduto)){
             $msg = "Produto não encontrado";
         }
     }
+
 
     return view('pratica.p1',
         [
@@ -118,6 +123,15 @@ Route::get('/pratica', function(Request $request){
 });
 
 
+
+
+
+
+
+
+
+//PRATICANDO O CRUD
+Route::get('/registros', [CrudController::class, 'showRegistros'])->name('registros');
 
 
 
