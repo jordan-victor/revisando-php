@@ -39,7 +39,7 @@ Route::get('/pratica', function(Request $request){
     $p1 = new Produto('PC GAMER', 10000, 15, "computador");
     $p2 = new Produto('MOUSE', 169, 100, "periferico");
     $p3 = new Produto('TECLADO', 250, 0, "periferico");
-    $p4 = new Produto('NOTEBOOK', 169, 100, "computador");
+    $p4 = new Produto('NOTEBOOK', 4500, 100, "computador");
     array_push($produtos, $p1);
     array_push($produtos, $p2);
     array_push($produtos, $p3);
@@ -150,7 +150,7 @@ Route::post('process-csv', [CsvController::class, 'processCsv'])->name('process-
 
 
 
-/*TOTAS DE LOGIN*/
+/*ROTAS DE LOGIN*/
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

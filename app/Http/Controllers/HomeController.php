@@ -75,6 +75,50 @@ class HomeController extends Controller
             echo "Número: $item<br>";
         }
 
-        return view('welcome', compact('array', 'usuarios', 'indefinida'));
+
+
+
+
+
+
+        //->when(), @forelse(), array_column(). Pegando o maior valor de um array e depois passando a metade do valor do maior valor do array para o elemento com o valor igual a zero, para que esse menor valor agora tenha a metade do maior valor e o maior valor senha também a metade do seu valor anterior
+        $database = [
+            'usuarios'=>[
+                ['nome'=>'Jordan', 'senha'=>'123jvb', 'pontos'=>567],
+                ['nome'=>'Aldemiro', 'senha'=>'123adm', 'pontos'=>243],
+                ['nome'=>'Mardisa', 'senha'=>'123mds', 'pontos'=>465],
+                ['nome'=>'Bertolingus', 'senha'=>'123btl', 'pontos'=>578],
+                ['nome'=>'Milindrosa', 'senha'=>'123mld', 'pontos'=>420],
+                ['nome'=>'Bricotiucus', 'senha'=>'123brt', 'pontos'=>0],
+            ]
+        ];
+
+        $novaLista = [];
+        $maior = max(array_column($database['usuarios'], 'pontos'));
+        $menor = min(array_column($database['usuarios'], 'pontos'));
+        $novoValor = null;
+        $novoMaiorValor = null;
+        $indice = null;
+        $indice2 = null;
+
+        foreach($database['usuarios'] as $i=>$usuario){
+            if($usuario['pontos'] == 0){
+                $novoValor = $usuario['pontos'] = max(array_column($database['usuarios'], 'pontos'))/2;
+                $indice = $i;
+
+                array_push($novaLista, $novoValor);
+            }
+
+            if($usuario['pontos'] == max(array_column($database['usuarios'], 'pontos'))){
+                $novoMaiorValor = max(array_column($database['usuarios'], 'pontos'));
+                $indice2 = $i;
+            }
+        }
+
+        $database['usuarios'][$indice]['pontos'] = $novoValor;
+        $database['usuarios'][$indice2]['pontos'] = $novoMaiorValor - $novoValor;
+        dd($database);
+
+        return view('welcome', compact('array', 'usuarios', 'indefinida', 'database'));
     }
 }

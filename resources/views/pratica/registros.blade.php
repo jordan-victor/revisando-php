@@ -3,14 +3,16 @@
 
 @section('h1', 'REGISTROS')
 
-@foreach($registros as $registro)
-    <p>Nome: {{$registro->profissional}}</p>
-    <p>CPF: {{$registro->cpf}}</p>
-    <hr>
+@foreach($filtro as $prof)
+    <p>{{$prof->cpf_prof}}</p>
 @endforeach
 
-@foreach($resultados as $resultado)
-    <p style="color:blue">{{$resultado->profissional}}</p>
+
+
+@foreach($registros as $registro)
+    <p>Nome: {{$registro->nome_prof}}</p>
+    <p>CPF: {{$registro->cpf_prof}}</p>
+    <hr>
 @endforeach
 
 @endsection

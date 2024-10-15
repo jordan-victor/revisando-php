@@ -1,15 +1,14 @@
 <?php
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
-use App\Models\Alertaarbovirose;
+use App\Models\Rural;
 
 class CrudController extends Controller
 {
     public function showRegistros(){
-        $registros = Alertaarbovirose::all();
-        $resultados = Alertaarbovirose::where('cpf','=', '02635130256')->get();
-        //echo count($registros)."<br>";
-        //echo count($resultados);
-        return view('pratica.registros', ['registros'=>$registros, 'resultados'=>$resultados]);
+        $registros = Rural::all();
+        $filtro = Rural::where('cpf_prof', '=', '02635130256')->get();
+        //echo count($registros);
+        return view('pratica.registros', ['registros'=>$registros, 'filtro'=>$filtro]);
     }
 }
