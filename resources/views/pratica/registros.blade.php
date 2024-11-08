@@ -12,6 +12,8 @@
 @foreach($registros as $registro)
     <p>Nome: {{$registro->nome_prof}}</p>
     <p>CPF: {{$registro->cpf_prof}}</p>
+    <p>Cargo: {{$registro->cargo}}</p>
+    <p>{{$registro->mais_comum}}</p>
     <hr>
 @endforeach
 

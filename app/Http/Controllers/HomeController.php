@@ -115,6 +115,8 @@ class HomeController extends Controller
             }
         }
 
+    
+
         $database['usuarios'][$indice]['pontos'] = $novoValor;
         $database['usuarios'][$indice2]['pontos'] = $novoMaiorValor - $novoValor;
         dd($database);
