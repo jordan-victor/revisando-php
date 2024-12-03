@@ -6,6 +6,9 @@ use App\Http\Controllers\csvController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SobreController;
 use App\Http\Controllers\CrudController;
+use App\Http\Controllers\propriedadesForm\propFormController;
+
+
 
 use Illuminate\Http\Request;
 use App\Http\Middleware\authMiddleware;
@@ -145,6 +148,11 @@ Route::post('process-csv', [CsvController::class, 'processCsv'])->name('process-
 
 
 
+
+
+//PROPRIEDADE old()
+Route::get('/propForms', [propFormController::class, 'propForms'])->name('propForms');
+Route::post('/sendValues', [propFormController::class, 'checkValues'])->name('sendValues');
 
 
 
