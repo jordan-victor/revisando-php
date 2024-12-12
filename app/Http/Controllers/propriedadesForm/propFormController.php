@@ -16,11 +16,20 @@ class propFormController extends Controller
 
 
     public function checkValues(Request $request){
-        $dados = $request->validate([
-            'nome'=>'required|min:4|max:50',
-            'email'=>'required',
-            'telefone'=>'required'
-        ]);
+        $dados = $request->validate(
+            [
+                'nome'=>'required|min:4|max:50',
+                'email'=>'required',
+                'telefone'=>'required'
+            ],
+            [
+                'nome.required'=>'O campo :attribute deve estar preenchido',
+                'nome.min'=>'O :attribute deve ter no mínimo 4 letras',
+                'nome.max'=>'O :attribute deve ter no máximo 50 letras',
+                'email.required'=>'O campo :attribute deve estar preenchido',
+                'telefone.required'=>'O campo :attribute deve estar preenchido'
+            ]
+        );
 
         $nomes = [];
         array_push($nomes, $request['nome']);
@@ -28,10 +37,8 @@ class propFormController extends Controller
         if(empty($dados)){
             echo 'É necessário preencher o formulário';
         }
-        else{
-            var_dump($nomes);
-        }
+    
 
-        //return redirect('propForms');
+        return redirect('propForms');
     }
 }
